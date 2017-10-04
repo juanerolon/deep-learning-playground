@@ -12,6 +12,7 @@ def setModel(num_nodes=12, feat_dim=8, initializer = 'random_uniform'):
     in a layer is connected to all neurons located in the previous layer and to all the neurons in the
     following layer.
     """
+    model = Sequential()
     model.add(Dense(num_nodes, input_dim = feat_dim, kernel_initializer = initializer))
     return model
 
