@@ -1,7 +1,10 @@
 
 import os
+import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+from keras.utils import np_utils
+
 from sklearn.preprocessing import Normalizer, MinMaxScaler
 
 def inspect_dataset(data):
@@ -15,6 +18,14 @@ def normalize_data(df, features):
     for feat in features:
         df[feat] = df[feat] / df[feat].max()
 
+def split_data(df, feature):
+    """Splits the N-feature data (frame) between N-1 feature subset X and a 1-feature label y
+       Returns the split as a tuple X, y
+    """
+    X = np.array(df)[:, 1:]
+    y = np_utils.to_categorical(np.array(data[feature]))
+
+    return X, y
 
 #two-class scatter plot
 def scatter_plot_grp(data, feature1, feature2, group_feature):
@@ -48,6 +59,10 @@ if __name__ == '__main__':
     inspect_dataset(data)
     normalize_data(data, ['gpa', 'gre'])
     inspect_dataset(data)
+
+
+
+
 
 
 
