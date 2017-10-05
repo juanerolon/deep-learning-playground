@@ -1,4 +1,23 @@
 
+""" Deep Learning Playground
+"""
+# Juan E Rolon 2017
+#
+# The present script implements a machine learning miniproject
+# using a deep ('not so deep') learning approach using Keras.
+
+# The goal of the miniproject is to predict student admissions to
+# graduate school at UCLA based on three pieces GPA, GRE Scores and
+# Class Rank
+
+# The miniproject generalizes my scratch work towards completion
+# of the Udacity Machine Learning Nanodegree
+#
+# Author: Juan E Rolon
+# https://github.com/juanerolon/deep-learning-playground
+#
+# License: MIT
+
 import os
 import numpy as np
 import matplotlib.pyplot as plt
