@@ -18,12 +18,18 @@ def normalize_data(df, features):
     for feat in features:
         df[feat] = df[feat] / df[feat].max()
 
-def split_data(df, feature):
+def split_data(df, features, as_numpy):
     """Splits the N-feature data (frame) between N-1 feature subset X and a 1-feature label y
-       Returns the split as a tuple X, y
+       Returns the split as a tuple X, y either is numpy arrays or pandas dataframes.
     """
-    X = df.drop(feature, axis=1).values
-    y = np_utils.to_categorical(np.array(data[feature]))
+    if as_numpy==True:
+        X = df.drop(features, axis=1).values
+        y = np_utils.to_categorical(np.array(data[features]))
+    elif as_numpy==False:
+        X = df.drop(features, axis=1)
+        y = pd.get_dummies(df[[features]], columns=[features])
+    else:
+        raise Exception('Incorrect as_numpy argument: {}'.format(as_numpy))
 
     return X, y
 
@@ -59,7 +65,7 @@ if __name__ == '__main__':
     inspect_dataset(data)
     normalize_data(data, ['gpa', 'gre'])
     inspect_dataset(data)
-    X, y = split_data(data,'admit')
+    X, y = split_data(data, 'admit', as_numpy=True)
 
     print(X)
     print(y)
