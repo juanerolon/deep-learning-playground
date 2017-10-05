@@ -3,6 +3,8 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+from keras.models import Sequential
+from keras.layers.core import Dense, Activation
 from keras.utils import np_utils
 
 from sklearn.preprocessing import Normalizer, MinMaxScaler
@@ -32,6 +34,23 @@ def split_data(df, features, as_numpy):
         raise Exception('Incorrect as_numpy argument: {}'.format(as_numpy))
 
     return X, y
+
+def build_inter_seq_model(input_dim, layer_loads, act_type):
+
+    model = Sequential()
+    model.add(Dense(layer_loads[0], input_dim=input_dim))
+    model.add(Activation('sigmoid'))
+    hidden_loads = layer_loads[1:]
+
+    for load in hidden_loads:
+        model.add(Dense(load))
+        model.add(Activation(act_type))
+
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+    return model
+
+
 
 #two-class scatter plot
 def scatter_plot_grp(data, feature1, feature2, group_feature):
@@ -67,8 +86,10 @@ if __name__ == '__main__':
     inspect_dataset(data)
     X, y = split_data(data, 'admit', as_numpy=True)
 
-    print(X)
-    print(y)
+    model = build_inter_seq_model(input_dim=6, layer_loads= [128, 32, 2], act_type='sigmoid')
+    model.summary()
+
+
 
 
 
