@@ -26,12 +26,12 @@ from keras.models import Sequential
 from keras.layers.core import Dense, Activation
 from keras.utils import np_utils
 
-from sklearn.preprocessing import Normalizer, MinMaxScaler
+from sklearn.model_selection import train_test_split
 
 def inspect_dataset(data):
     """Prints data column headers (fields) and 5-row data preview"""
-    print("Data fields: {}".format(list(data.columns)))
-    print("Data preview:\n")
+    print("\nData fields: {}".format(list(data.columns)))
+    print("\nData preview:\n")
     print(data.head())
 
 def normalize_data(df, features):
@@ -45,9 +45,11 @@ def split_data(df, features, as_numpy):
     """
     if as_numpy==True:
         X = df.drop(features, axis=1).values
+        #one-hot-encode y label
         y = np_utils.to_categorical(np.array(data[features]))
     elif as_numpy==False:
         X = df.drop(features, axis=1)
+        # one-hot-encode y label
         y = pd.get_dummies(df[[features]], columns=[features])
     else:
         raise Exception('Incorrect as_numpy argument: {}'.format(as_numpy))
@@ -103,10 +105,33 @@ if __name__ == '__main__':
     inspect_dataset(data)
     normalize_data(data, ['gpa', 'gre'])
     inspect_dataset(data)
-    X, y = split_data(data, 'admit', as_numpy=True)
+    #one-hot-encode rank feature
+    proc_data = pd.get_dummies(data, columns=['rank'])
+    X, y = split_data(proc_data, 'admit', as_numpy=True)
 
-    model = build_inter_seq_model(input_dim=6, layer_loads= [128, 32, 2], act_type='sigmoid')
-    model.summary()
+    print("Shape of X:", X.shape)
+    print("\nShape of y:", y.shape)
+    print("\nFirst 10 rows of X")
+    print(X[:10])
+    print("\nFirst 10 rows of y")
+    print(y[:10])
+
+
+    if True:
+
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
+
+        model = build_inter_seq_model(input_dim=6, layer_loads= [128, 32, 2], act_type='sigmoid')
+        print("\nModel Summary:\n")
+        model.summary()
+
+        print(X_train.shape)
+        print(y_train.shape)
+
+        model.fit(X_train, y_train, epochs=1000, batch_size=100, verbose=0)
+        score = model.evaluate(X_test, y_test)
+
+        print("Model Accuracy: {}".format(score))
 
 
 
