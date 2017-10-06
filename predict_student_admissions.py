@@ -119,7 +119,7 @@ if __name__ == '__main__':
 
     if True:
 
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 42)
 
         model = build_inter_seq_model(input_dim=6, layer_loads= [128, 32, 2], act_type='sigmoid')
         print("\nModel Summary:\n")
