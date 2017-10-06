@@ -40,8 +40,8 @@ def normalize_data(df, features):
         df[feat] = df[feat] / df[feat].max()
 
 def split_data(df, features, as_numpy):
-    """Splits the N-feature data (frame) between N-1 feature subset X and a 1-feature label y
-       Returns the split as a tuple X, y either is numpy arrays or pandas dataframes.
+    """Splits the N-feature data (frame) between N-1 feature subset X and a 1-feature one-hot
+      encoded label y. Returns the split as a tuple X, y either is numpy arrays or pandas dataframes.
     """
     if as_numpy==True:
         X = df.drop(features, axis=1).values
@@ -107,8 +107,10 @@ if __name__ == '__main__':
     inspect_dataset(data)
     #one-hot-encode rank feature
     proc_data = pd.get_dummies(data, columns=['rank'])
+    #split data into features X and labels y
     X, y = split_data(proc_data, 'admit', as_numpy=True)
 
+    print("\nData Split preview:\n")
     print("Shape of X:", X.shape)
     print("\nShape of y:", y.shape)
     print("\nFirst 10 rows of X")
@@ -116,22 +118,20 @@ if __name__ == '__main__':
     print("\nFirst 10 rows of y")
     print(y[:10])
 
+    #split data into training and testing subsets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 42)
 
-    if True:
+    #build cnn network architecture using Keras
+    model = build_inter_seq_model(input_dim=6, layer_loads= [128, 32, 2], act_type='sigmoid')
 
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 42)
+    #preview cnn model summary
+    print("\nModel Summary:\n")
+    model.summary()
 
-        model = build_inter_seq_model(input_dim=6, layer_loads= [128, 32, 2], act_type='sigmoid')
-        print("\nModel Summary:\n")
-        model.summary()
-
-        print(X_train.shape)
-        print(y_train.shape)
-
-        model.fit(X_train, y_train, epochs=1000, batch_size=100, verbose=0)
-        score = model.evaluate(X_test, y_test)
-
-        print("Model Accuracy: {}".format(score))
+    #fit model to training data and evaluate and print the accuracy
+    model.fit(X_train, y_train, epochs=1000, batch_size=100, verbose=0)
+    score = model.evaluate(X_test, y_test)
+    print("Model Accuracy: {}".format(score[1]))
 
 
 
