@@ -28,6 +28,9 @@ from keras.utils import np_utils
 
 from sklearn.model_selection import train_test_split
 
+#supress warnings regarding tensorflow compilation optimizations
+os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
+
 def inspect_dataset(data):
     """Prints data column headers (fields) and 5-row data preview"""
     print("\nData fields: {}".format(list(data.columns)))
