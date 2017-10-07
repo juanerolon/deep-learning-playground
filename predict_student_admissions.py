@@ -23,7 +23,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from keras.models import Sequential
-from keras.layers.core import Dense, Activation
+from keras.layers.core import Dense, Activation, Dropout
 from keras.utils import np_utils
 
 from sklearn.model_selection import train_test_split
@@ -59,7 +59,7 @@ def split_data(df, features, as_numpy):
 
     return X, y
 
-def build_inter_seq_model(input_dim, layer_loads, act_type):
+def build_inter_seq_model(input_dim, layer_loads, act_type, with_dropout=False):
 
     model = Sequential()
     model.add(Dense(layer_loads[0], input_dim=input_dim))
@@ -69,6 +69,8 @@ def build_inter_seq_model(input_dim, layer_loads, act_type):
     for load in hidden_loads:
         model.add(Dense(load))
         model.add(Activation(act_type))
+        if with_dropout:
+            model.add(Dropout(0.2))
 
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
@@ -125,7 +127,7 @@ if __name__ == '__main__':
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 42)
 
     #build cnn network architecture using Keras
-    model = build_inter_seq_model(input_dim=6, layer_loads= [128, 32, 2], act_type='sigmoid')
+    model = build_inter_seq_model(input_dim=6, layer_loads= [128, 32, 2], act_type='sigmoid', with_dropout=True)
 
     #preview cnn model summary
     print("\nModel Summary:\n")
