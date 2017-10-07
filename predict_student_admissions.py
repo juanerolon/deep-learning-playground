@@ -76,7 +76,8 @@ def build_inter_seq_model(input_dim, layer_loads, act_type, with_dropout=False):
         # specifies whether we want to randomly switch off units at a rate 20% in-between epochs
         if with_dropout:
             model.add(Dropout(0.2))
-    #compile model in backend
+    #compile model in backend specifying loss function e.g. 'mean_squared_error', 'categorical_crossentropy', etc
+    #and optimizer e.g. 'adam', 'sgd', 'rmsprop', 'adagrad' , etc
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
     return model
