@@ -62,16 +62,21 @@ def split_data(df, features, as_numpy):
 def build_inter_seq_model(input_dim, layer_loads, act_type, with_dropout=False):
 
     model = Sequential()
+    #add layer immediate to input with specified number of units or neurons (loads)
     model.add(Dense(layer_loads[0], input_dim=input_dim))
+    #specifies the activation function e.g. 'sigmoid', 'relu', 'tanh'
     model.add(Activation('sigmoid'))
     hidden_loads = layer_loads[1:]
 
     for load in hidden_loads:
+        #add remaining hidden layers with specified number of units or neurons (loads)
         model.add(Dense(load))
+        # specifies the activation function e.g. 'sigmoid', 'relu', 'tanh'
         model.add(Activation(act_type))
+        # specifies whether we want to randomly switch off units at a rate 20% in-between epochs
         if with_dropout:
             model.add(Dropout(0.2))
-
+    #compile model in backend
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
     return model
