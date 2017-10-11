@@ -15,7 +15,7 @@
 # Author: Juan E Rolon
 # https://github.com/juanerolon/deep-learning-playground
 #
-# License: MIT:
+
 
 
 #The imdb data comes preloaded in Keras, which means we don't need to open or read any files manually.
@@ -78,3 +78,18 @@ y_test = keras.utils.to_categorical(y_test, num_classes)
 print("\nTraining and Testing Label Sets Shapes After One-Hot-Encoding:\n")
 print("Training one-hot-encoded labels set y has shape {}".format(y_train.shape))
 print("Testing one-hot-encoded labels set y has shape {}".format(y_test.shape))
+print("\nModel Summary:\n")
+
+#Network architecture
+model = Sequential()
+#Define input layer with relu activation
+model.add(Dense(512, activation='relu', input_dim=1000))
+#Nodes random shutdown at a 50% rate between epochs
+model.add(Dropout(0.5))
+#Define output layer
+model.add(Dense(num_classes, activation='softmax'))
+#Display model summary
+model.summary()
+
+# Compiling the model using categorical_crossentropy loss, and rmsprop optimizer.
+#model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
