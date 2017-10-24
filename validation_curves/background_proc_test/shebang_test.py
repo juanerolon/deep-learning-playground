@@ -33,6 +33,34 @@ print(history_data.head())
 #Save history to CSV file
 history_data.to_csv('toy_keras_nn.csv')
 
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
 
+pp = PdfPages('performance_metrics.pdf')
+
+plt.figure(1,figsize=(11, 4))
+
+
+plt.subplot(1,2,1)
+# summarize history for accuracy
+plt.plot(h.history['acc'],color='b')
+plt.plot(h.history['val_acc'],color='k')
+plt.title('Model accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Validation'], loc='upper left')
+
+
+plt.subplot(1,2,2)
+# summarize history for loss
+plt.plot(h.history['loss'])
+plt.plot(h.history['val_loss'])
+plt.title('Model loss')
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Validation'], loc='upper left')
+
+plt.savefig(pp, format='pdf')
+pp.close()
 
 
