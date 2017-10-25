@@ -1,0 +1,9 @@
+#The utilities found in this folder help running a python script in the
+#background using a specific conda environment. The relevant instructions are contained in
+#the shell script run_script.sh
+#
+#Both the shell script and python script are executables set with 
+# chmod +x filename
+#
+#The command used to execute the shell script which calls the python script is
+# $nohup ./run_script.sh > output.txt &
