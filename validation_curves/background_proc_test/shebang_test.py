@@ -1,7 +1,12 @@
+import time
 import numpy
 import pandas as pd
 from keras.models import Sequential
 from keras.layers import Dense
+
+start_time = time.time()
+
+print("--- %s seconds ---" % (time.time() - start_time))
 
 # fix random seed for reproducibility
 seed = 7
@@ -63,4 +68,9 @@ plt.legend(['Train', 'Validation'], loc='upper left')
 plt.savefig(pp, format='pdf')
 pp.close()
 
+end_time = time.time()
+exc_time =end_time-start_time
+
+print("\n -------END---------- \n")
+print("Execution time = {0:.2f} seconds".format(round(exc_time,2)))
 
