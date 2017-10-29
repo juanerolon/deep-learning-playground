@@ -4,6 +4,6 @@
 source activate tflow_gpu_opt
 
 ##cd into directory containing the python script you wish to run
-cd /mnt/linuxdata2/Dropbox/_machine_learning/ai/deep-learning-playground/cnn-test
+cd /mnt/linuxdata2/Dropbox/_machine_learning/ai/deep-learning-playground/cnn-test0
 ##execute python script
-python cnn-test.py
+python cnn-test0.py
