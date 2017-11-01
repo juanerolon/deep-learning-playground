@@ -184,84 +184,78 @@ train_ResNet50 = bottleneck_features['train']
 valid_ResNet50 = bottleneck_features['valid']
 test_ResNet50 = bottleneck_features['test']
 
-#Specify number of epochs and batch_size
-epochs = 100
-batch_size = 20
 
+#------------------------------- Known Model ----------------------------------
 
-init_train_time = time.time()
+from keras.layers import Conv2D, MaxPooling2D, GlobalAveragePooling2D
+from keras.layers import Dropout, Flatten, Dense, Activation
+from keras.models import Sequential
+from keras.layers.normalization import BatchNormalization
 
-# Set to True to fit the model to the non-augmented datasets
-if False:
-    h = Xception_model.fit(train_Xception, train_targets,
-                    validation_data=(valid_Xception, valid_targets),
-                    epochs=epochs, batch_size=batch_size, callbacks=[checkpointer], verbose=1)
+ResNet_model = Sequential()
+ResNet_model.add(GlobalAveragePooling2D(input_shape=train_ResNet50.shape[1:]))
+ResNet_model.add(Dense(133, activation='softmax'))
+ResNet_model.summary()
 
-# Set to True to fit the model to the augmented datasets
-if True:
-    h = Xception_model.fit_generator(datagen_train.flow(train_Xception, train_targets, batch_size=batch_size),
-                        steps_per_epoch=train_Xception.shape[0] // batch_size,
-                        epochs=epochs, verbose=1, callbacks=[checkpointer],
-                        validation_data=datagen_valid.flow(valid_Xception, valid_targets, batch_size=batch_size),
-                        validation_steps=valid_Xception.shape[0] // batch_size)
+#----------- Load Weights from prior checkpointed training  -------------
+ResNet_model.load_weights('optimized_adamax.ResNet50.hdf5') #assumes file in local directory
+print("Created model and loaded weights from file")
 
-end_train_time = time.time()
-tot_train_time = end_train_time-init_train_time
+#----------- Compile Model -------------
+from keras.optimizers import Adamax
+ResNet_model.compile(loss='categorical_crossentropy', optimizer=Adamax(lr=0.002), metrics=['accuracy'])
 
-#Load optimized weights saved during training
-Xception_model.load_weights('saved_models/Xception_weights_opt.hdf5')
-
-
-# get index of predicted dog breed for each image in test set
-Xception_predictions = [np.argmax(Xception_model.predict(np.expand_dims(feature, axis=0))) for feature in test_Xception]
-
-# report test accuracy
-test_accuracy = 100*np.sum(np.array(Xception_predictions)==np.argmax(test_targets, axis=1))/len(Xception_predictions)
+ResNet50_predictions = [np.argmax(ResNet_model.predict(np.expand_dims(feature, axis=0))) for feature in test_ResNet50]
+test_accuracy = 100*np.sum(np.array(ResNet50_predictions)==np.argmax(test_targets, axis=1))/len(ResNet50_predictions)
 print('Test accuracy: %.4f%%' % test_accuracy)
 
-###########################################################
-#Save performance metrics to a file and pdf gigures
 
-import pandas as pd
-import matplotlib.pyplot as plt
+#######################################################################
+if False:
 
-#allows to store plt plots in files while script runs in background
-plt.switch_backend('agg')
+    ##################################################################
+    #Save performance metrics to a file and pdf gigures
 
+    import pandas as pd
+    import matplotlib.pyplot as plt
 
-#Save history to CSV file
-history_data = pd.DataFrame(h.history)
-history_data.to_csv('performance_metrics.csv')
-
-plt.figure(1, figsize=(10, 4))
-
-plt.subplot(1,2,1)
-# summarize history for accuracy
-plt.plot(h.history['acc'],color='b')
-plt.plot(h.history['val_acc'],color='k')
-plt.title('Model accuracy')
-plt.ylabel('Accuracy')
-plt.xlabel('Epoch')
-plt.legend(['Train', 'Validation'], loc='upper left')
+    #allows to store plt plots in files while script runs in background
+    plt.switch_backend('agg')
 
 
-plt.subplot(1,2,2)
-# summarize history for loss
-plt.plot(h.history['loss'])
-plt.plot(h.history['val_loss'])
-plt.title('Model loss')
-plt.ylabel('Loss')
-plt.xlabel('Epoch')
-plt.legend(['Train', 'Validation'], loc='upper left')
+    #Save history to CSV file
+    history_data = pd.DataFrame(h.history)
+    history_data.to_csv('performance_metrics.csv')
 
-plt.savefig('performance_metrics.png', dpi=300, orientation='landscape')
+    plt.figure(1, figsize=(10, 4))
 
-end_time = time.time()
-exc_time =end_time-start_time
+    plt.subplot(1,2,1)
+    # summarize history for accuracy
+    plt.plot(h.history['acc'],color='b')
+    plt.plot(h.history['val_acc'],color='k')
+    plt.title('Model accuracy')
+    plt.ylabel('Accuracy')
+    plt.xlabel('Epoch')
+    plt.legend(['Train', 'Validation'], loc='upper left')
 
-print("\n -------END---------- \n")
-print("Training time = {0:.3f} minutes ".format(round(tot_train_time/60.0, 3)))
-print("Total run time = {0:.3f} minutes".format(round(exc_time/60.0, 3)))
+
+    plt.subplot(1,2,2)
+    # summarize history for loss
+    plt.plot(h.history['loss'])
+    plt.plot(h.history['val_loss'])
+    plt.title('Model loss')
+    plt.ylabel('Loss')
+    plt.xlabel('Epoch')
+    plt.legend(['Train', 'Validation'], loc='upper left')
+
+    plt.savefig('performance_metrics.png', dpi=300, orientation='landscape')
+
+    end_time = time.time()
+    exc_time =end_time-start_time
+
+    print("\n -------END---------- \n")
+    print("Training time = {0:.3f} minutes ".format(round(tot_train_time/60.0, 3)))
+    print("Total run time = {0:.3f} minutes".format(round(exc_time/60.0, 3)))
 
 #as process runs in background we need to close tensorflow session manually
 tf.Session().close()
