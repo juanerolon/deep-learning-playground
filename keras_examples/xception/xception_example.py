@@ -180,7 +180,7 @@ valid_Xception = bottleneck_features['valid']
 test_Xception = bottleneck_features['test']
 
 
-#Quick model build-up: join the pre-trained VGG16 feature layer wit the output layer
+#Quick model build-up: join the pre-trained Xception feature layer wit the output layer
 from keras.layers import GlobalAveragePooling2D
 from keras.layers import  Dense
 from keras.models import Sequential
