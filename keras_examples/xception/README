@@ -1,0 +1,11 @@
+#The utilities found in this folder help running a python script that implements the training of
+#a convolutional neural network using keras with tensorflow as a backend.
+#The scripts are run in the background using a specific conda environment. 
+
+The relevant content is contained in the shell script run_script.sh and the python script cnn-test.py
+#
+#Both the shell script and python script can be made (optionally) executables with 
+# chmod +x filename
+#
+#The command used to execute the shell script which calls the python script is
+# $nohup ./run_script.sh > output.txt &

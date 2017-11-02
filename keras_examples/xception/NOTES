@@ -1,0 +1,20 @@
+#We will test whether incremental memory allocation or fractional allocation over total memory
+#affects xception model fitting performance.
+#
+#
+
+#Config
+GPU mem_frac = 0.7
+Test accuracy: 81.8182%
+epochs = 1
+batch_size = 20
+Training time = 5.258 minutes 
+Total run time = 7.318 minutes
+
+#Config
+Incremental GPU mem assignation
+Test accuracy: 82.2967%
+epochs = 1
+batch_size = 20
+Training time = 5.278 minutes 
+Total run time = 7.326 minutes
