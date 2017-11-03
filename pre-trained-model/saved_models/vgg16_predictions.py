@@ -226,20 +226,6 @@ def VGG16_predict_breed(img_path):
     return dog_names[np.argmax(predicted_vector)]
 
 
-# returns "True" if face is detected in image stored at img_path
-def face_detector(img_path):
-    img = cv2.imread(img_path)
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    faces = face_cascade.detectMultiScale(gray)
-    return len(faces) > 0
-
-
-### returns "True" if a dog is detected in the image stored at img_path
-def dog_detector(img_path):
-    prediction = VGG16_predict_labels(img_path)
-    return ((prediction <= 268) & (prediction >= 151))
-
-
 # determines and returns whether the image contains a human, dog, or neither
 def classify_image(img_path):
     img = cv2.imread(img_path)
