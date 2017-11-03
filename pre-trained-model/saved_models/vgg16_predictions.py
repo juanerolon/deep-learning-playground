@@ -96,6 +96,8 @@ print('There are %d total human images.' % len(human_files))
 #face detectors
 
 import cv2
+import matplotlib.pyplot as plt
+
 def face_detector(img_path):
     """returns "True" if face is detected in image stored at img_path"""
     img = cv2.imread(img_path)
@@ -257,6 +259,16 @@ def classify_image(img_path):
         print("This dog looks like a {}".format(breed))
     else:
         print("Non identifiable dog nor human faces detected")
+
+
+#Perform actual test on images provided in test_images folder
+#############################################################
+
+classify_image('test_images/German_Shepherd.jpg')
+classify_image('test_images/Cocker_spaniel.jpg')
+classify_image('test_images/Chihuahua.jpg')
+classify_image('test_images/jr.png')
+
 
 
 
