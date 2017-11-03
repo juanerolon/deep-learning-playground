@@ -200,7 +200,7 @@ VGG16_model.add(Dense(133, activation='softmax'))
 VGG16_model.summary()
 
 #----------- Load Weights from prior checkpointed training  -------------
-VGG16_model.load_weights('saved_models/weights.best.VGG16.hdf5') #assumes file in local directory
+VGG16_model.load_weights('weights.best.VGG16.hdf5') #assumes file in local directory
 print("Created model and loaded weights from file")
 
 #----------- Compile Model -------------
