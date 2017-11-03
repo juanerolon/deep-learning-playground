@@ -212,6 +212,55 @@ VGG16_predictions = [np.argmax(VGG16_model.predict(np.expand_dims(feature, axis=
 test_accuracy = 100*np.sum(np.array(VGG16_predictions)==np.argmax(test_targets, axis=1))/len(VGG16_predictions)
 print('Test accuracy: %.4f%%' % test_accuracy)
 
+
+#Define function to test model predictions
+from extract_bottleneck_features import *
+def VGG16_predict_breed(img_path):
+    # extract bottleneck features
+    bottleneck_feature = extract_VGG16(path_to_tensor(img_path))
+    # obtain predicted vector
+    predicted_vector = VGG16_model.predict(bottleneck_feature)
+    # return dog breed that is predicted by the model
+    return dog_names[np.argmax(predicted_vector)]
+
+
+# returns "True" if face is detected in image stored at img_path
+def face_detector(img_path):
+    img = cv2.imread(img_path)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(gray)
+    return len(faces) > 0
+
+
+### returns "True" if a dog is detected in the image stored at img_path
+def dog_detector(img_path):
+    prediction = VGG16_predict_labels(img_path)
+    return ((prediction <= 268) & (prediction >= 151))
+
+
+# determines and returns whether the image contains a human, dog, or neither
+def classify_image(img_path):
+    img = cv2.imread(img_path)
+    cv_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    imgplot = plt.imshow(cv_rgb)
+
+    if face_detector(img_path):
+        pred = VGG16_predict_breed(img_path)
+        breed = pred.rpartition('/')[-1].rpartition('.')[-1].replace('_', ' ')
+        print("Human face detected in image")
+        print("This human looks like a {}".format(breed))
+        return
+    elif dog_detector(img_path):
+        pred = VGG16_predict_breed(img_path)
+        breed = pred.rpartition('/')[-1].rpartition('.')[-1].replace('_', ' ')
+        print("Dog face detected in image")
+        print("This dog looks like a {}".format(breed))
+    else:
+        print("Non identifiable dog nor human faces detected")
+
+
+
+
 #as process runs in background we need to close tensorflow session manually
 tf.Session().close()
 
