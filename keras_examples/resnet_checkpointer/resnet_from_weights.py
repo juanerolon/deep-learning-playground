@@ -1,5 +1,5 @@
 #Illustrates model weights loading.
-#We obtain weights from a resnet50 model saved from
+#We obtain weights from a Resnet50 model saved from
 #previous model fitting. Assumes known architecture.
 #@juanerolon (Juan E. Rolon)
 #https://github.com/juanerolon/
@@ -208,54 +208,6 @@ ResNet_model.compile(loss='categorical_crossentropy', optimizer=Adamax(lr=0.002)
 ResNet50_predictions = [np.argmax(ResNet_model.predict(np.expand_dims(feature, axis=0))) for feature in test_ResNet50]
 test_accuracy = 100*np.sum(np.array(ResNet50_predictions)==np.argmax(test_targets, axis=1))/len(ResNet50_predictions)
 print('Test accuracy: %.4f%%' % test_accuracy)
-
-
-#######################################################################
-if False:
-
-    ##################################################################
-    #Save performance metrics to a file and pdf gigures
-
-    import pandas as pd
-    import matplotlib.pyplot as plt
-
-    #allows to store plt plots in files while script runs in background
-    plt.switch_backend('agg')
-
-
-    #Save history to CSV file
-    history_data = pd.DataFrame(h.history)
-    history_data.to_csv('performance_metrics.csv')
-
-    plt.figure(1, figsize=(10, 4))
-
-    plt.subplot(1,2,1)
-    # summarize history for accuracy
-    plt.plot(h.history['acc'],color='b')
-    plt.plot(h.history['val_acc'],color='k')
-    plt.title('Model accuracy')
-    plt.ylabel('Accuracy')
-    plt.xlabel('Epoch')
-    plt.legend(['Train', 'Validation'], loc='upper left')
-
-
-    plt.subplot(1,2,2)
-    # summarize history for loss
-    plt.plot(h.history['loss'])
-    plt.plot(h.history['val_loss'])
-    plt.title('Model loss')
-    plt.ylabel('Loss')
-    plt.xlabel('Epoch')
-    plt.legend(['Train', 'Validation'], loc='upper left')
-
-    plt.savefig('performance_metrics.png', dpi=300, orientation='landscape')
-
-    end_time = time.time()
-    exc_time =end_time-start_time
-
-    print("\n -------END---------- \n")
-    print("Training time = {0:.3f} minutes ".format(round(tot_train_time/60.0, 3)))
-    print("Total run time = {0:.3f} minutes".format(round(exc_time/60.0, 3)))
 
 #as process runs in background we need to close tensorflow session manually
 tf.Session().close()
