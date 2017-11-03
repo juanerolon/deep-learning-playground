@@ -1,11 +1,10 @@
 #@
 
 #Illustrates model weights loading.
-#We obtain weights from a Resnet50 model saved from
+#We obtain weights from a vgg16 model saved from
 #previous model fitting. Assumes known architecture.
 #@juanerolon (Juan E. Rolon)
 #https://github.com/juanerolon/
-
 
 
 #needed for code execution timing
@@ -23,7 +22,7 @@ config = tf.ConfigProto()
 
 # Set to True to allow GPU dynamic memory incremental allocation
 # Note: memory is not deallocated automatically
-if True:
+if False:
     config.gpu_options.allow_growth = True
     print("GPU memory incrementally allocated for current tensorflow session")
 
@@ -60,7 +59,8 @@ def load_dataset(path):
 # Set to True specify path to folder containing dataset subfolders
 # Note: useful if jupyter notebook not located in default location
 if True:
-    ds_path = '/mnt/linuxdata2/Dropbox/_machine_learning/udacity_projects/cnn-project/'
+    #ds_path = '/mnt/linuxdata2/Dropbox/_machine_learning/udacity_projects/cnn-project/'
+    ds_path = '/Users/juanerolon/Dropbox/_machine_learning/udacity_projects/cnn-project/'
 else:
     ds_path = ''
 
@@ -179,12 +179,12 @@ datagen_valid.fit(valid_tensors)
 #Here we load the bottleneck features file from a different specified path different from
 #ds_path defined above
 
-features_path = '/mnt/linuxdata2/Dropbox/_machine_learning/ai/bottleneck_features/'
+features_path = '/Users/juanerolon/Dropbox/_machine_learning/ai/bottleneck_features/'
 
-bottleneck_features = np.load(features_path + 'DogResnet50Data.npz')
-train_ResNet50 = bottleneck_features['train']
-valid_ResNet50 = bottleneck_features['valid']
-test_ResNet50 = bottleneck_features['test']
+bottleneck_features = np.load(features_path + 'DogVGG16Data.npz')
+train_VGG16 = bottleneck_features['train']
+valid_VGG16 = bottleneck_features['valid']
+test_VGG16 = bottleneck_features['test']
 
 
 #------------------------------- Known Model ----------------------------------
@@ -194,21 +194,22 @@ from keras.layers import Dropout, Flatten, Dense, Activation
 from keras.models import Sequential
 from keras.layers.normalization import BatchNormalization
 
-ResNet_model = Sequential()
-ResNet_model.add(GlobalAveragePooling2D(input_shape=train_ResNet50.shape[1:]))
-ResNet_model.add(Dense(133, activation='softmax'))
-ResNet_model.summary()
+VGG16_model = Sequential()
+VGG16_model.add(GlobalAveragePooling2D(input_shape=train_VGG16.shape[1:]))
+VGG16_model.add(Dense(133, activation='softmax'))
+VGG16_model.summary()
 
 #----------- Load Weights from prior checkpointed training  -------------
-ResNet_model.load_weights('optimized_adamax.ResNet50.hdf5') #assumes file in local directory
+VGG16_model.load_weights('saved_models/weights.best.VGG16.hdf5') #assumes file in local directory
 print("Created model and loaded weights from file")
 
 #----------- Compile Model -------------
-from keras.optimizers import Adamax
-ResNet_model.compile(loss='categorical_crossentropy', optimizer=Adamax(lr=0.002), metrics=['accuracy'])
+VGG16_model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
 
-ResNet50_predictions = [np.argmax(ResNet_model.predict(np.expand_dims(feature, axis=0))) for feature in test_ResNet50]
-test_accuracy = 100*np.sum(np.array(ResNet50_predictions)==np.argmax(test_targets, axis=1))/len(ResNet50_predictions)
+# get index of predicted dog breed for each image in test set
+VGG16_predictions = [np.argmax(VGG16_model.predict(np.expand_dims(feature, axis=0))) for feature in test_VGG16]
+# report test accuracy
+test_accuracy = 100*np.sum(np.array(VGG16_predictions)==np.argmax(test_targets, axis=1))/len(VGG16_predictions)
 print('Test accuracy: %.4f%%' % test_accuracy)
 
 #as process runs in background we need to close tensorflow session manually
