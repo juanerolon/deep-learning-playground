@@ -63,14 +63,13 @@ To run each individual script you may use your favorite IDE or run the script fr
 
 Please feel free to fork or clone or submit pull requests. By participating in this project, you agree to abide by open source standards and code of conduct.
 
+## About
+
+Collection of individual scripts and ipython notebooks of my scratch work towards implementing convolutional neural networks in Keras and Tensorflow. As such, the scripts are fully functional but do not reflect the finished product nor constitute any type of reporting document.
+
 ## License
 
 The present project is a public domain work. Please feel free to use it as is, modify it or do whatever you see fit.
-
-## About
-
-
-Collection of individual scripts and ipython notebooks of my scratch work towards implementing convolutional neural networks in Keras and Tensorflow. As such, the scripts are fully functional but do not reflect the finished product nor constitute any type of reporting document.
 
 
 ```python
