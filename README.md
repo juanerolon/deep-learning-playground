@@ -1,6 +1,12 @@
 
 # Deep Learning Playground 
 
+## Juan E. Rolon, 2018
+
+<img src="deep-learning.png"
+     alt="customer_segments"
+     style="float: left; margin-right: 10px; width: 250px;" />
+
 Collection of individual scripts and ipython notebooks of my scratch work towards implementing convolutional neural networks in Keras and Tensorflow. As such, the scripts are fully functional but do not reflect the finished product nor constitute any type of reporting document. 
 
 ## Description
