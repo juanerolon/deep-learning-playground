@@ -1,8 +1,8 @@
 
 # Deep Learning Playground 
-
-## Juan E. Rolon, 2018
-
+#
+## Juan E. Rolon
+#
 <img src="deep-learning.png"
      alt="customer_segments"
      style="float: left; margin-right: 10px; width: 250px;" />
