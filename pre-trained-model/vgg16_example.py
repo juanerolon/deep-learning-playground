@@ -52,6 +52,7 @@ def load_dataset(path):
 
 # Set to True specify path to folder containing dataset subfolders
 # Note: useful if jupyter notebook not located in default location
+# The location to path cnn-project changed due to corrupt repository on local premises
 if True:
     ds_path = '/mnt/linuxdata2/Dropbox/_machine_learning/udacity_projects/cnn-project/'
 else:
