@@ -42,6 +42,7 @@ Fork or clone GitHub repository and make sure you have a working Python 3 instal
 ### Requisites
 
 ** Libraries **
+
 - Sklearn 
 - Tensorflow with GPU support
 - OpenCV
