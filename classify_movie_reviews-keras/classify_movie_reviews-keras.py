@@ -1,6 +1,7 @@
 """ Deep Learning Playground
 """
-# Juan E Rolon 2017
+#
+# Juan E Rolon
 #
 # The present script implements a machine learning miniproject
 # using a deep ('not so deep') learning approach using Keras.
